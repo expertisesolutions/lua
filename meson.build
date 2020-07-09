@@ -21,16 +21,6 @@ else
   error('Unsupported platform')
 endif
 
-incdir = include_directories('.')
-
-defs = []
-if get_option('default_library') == 'shared'
-  defs += '-DLUA_BUILD_AS_DLL'
-endif
-
-lua_dep = declare_dependency(link_with : lualib,
-  include_directories : incdir, compile_args: defs)
-
 src = [
   'lapi.c',
   'lcode.c',
@@ -73,6 +63,16 @@ endif
 
 lualib = library('lua', src,
   dependencies : system_deps)
+
+incdir = include_directories('.')
+
+defs = []
+if get_option('default_library') == 'shared'
+  defs += '-DLUA_BUILD_AS_DLL'
+endif
+
+lua_dep = declare_dependency(link_with : lualib,
+  include_directories : incdir, compile_args: defs)
 
 executable('luai', 'lua.c',
   link_with : lualib,
